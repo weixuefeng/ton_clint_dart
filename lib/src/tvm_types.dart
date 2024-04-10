@@ -1,0 +1,473 @@
+part of 'tonsdktypes.dart';
+
+class TvmErrorCode{
+late String _value;
+String get value => _value;
+TvmErrorCode.CanNotReadTransaction(){
+_value = 'CanNotReadTransaction';}
+TvmErrorCode.CanNotReadBlockchainConfig(){
+_value = 'CanNotReadBlockchainConfig';}
+TvmErrorCode.TransactionAborted(){
+_value = 'TransactionAborted';}
+TvmErrorCode.InternalError(){
+_value = 'InternalError';}
+TvmErrorCode.ActionPhaseFailed(){
+_value = 'ActionPhaseFailed';}
+TvmErrorCode.AccountCodeMissing(){
+_value = 'AccountCodeMissing';}
+TvmErrorCode.LowBalance(){
+_value = 'LowBalance';}
+TvmErrorCode.AccountFrozenOrDeleted(){
+_value = 'AccountFrozenOrDeleted';}
+TvmErrorCode.AccountMissing(){
+_value = 'AccountMissing';}
+TvmErrorCode.UnknownExecutionError(){
+_value = 'UnknownExecutionError';}
+TvmErrorCode.InvalidInputStack(){
+_value = 'InvalidInputStack';}
+TvmErrorCode.InvalidAccountBoc(){
+_value = 'InvalidAccountBoc';}
+TvmErrorCode.InvalidMessageType(){
+_value = 'InvalidMessageType';}
+TvmErrorCode.ContractExecutionError(){
+_value = 'ContractExecutionError';}
+TvmErrorCode.AccountIsSuspended(){
+_value = 'AccountIsSuspended';}
+@override String toString() {return '"$_value"';}
+TvmErrorCode.fromMap(str) {_value = str;}
+}
+class ExecutionOptions extends TonSdkStructure{
+///boc with config
+late String? _blockchain_config;
+String? get blockchain_config => _blockchain_config;
+///time that is used as transaction time
+late int? _block_time;
+int? get block_time => _block_time;
+///block logical time
+late BigInt? _block_lt;
+BigInt? get block_lt => _block_lt;
+///transaction logical time
+late BigInt? _transaction_lt;
+BigInt? get transaction_lt => _transaction_lt;
+///Overrides standard TVM behaviour. If set to `true` then CHKSIG always will return `true`.
+late bool? _chksig_always_succeed;
+bool? get chksig_always_succeed => _chksig_always_succeed;
+///Signature ID to be used in signature verifying instructions when CapSignatureWithId capability is enabled
+late int? _signature_id;
+int? get signature_id => _signature_id;
+ExecutionOptions({String? blockchain_config,int? block_time,BigInt? block_lt,BigInt? transaction_lt,bool? chksig_always_succeed,int? signature_id,}){
+
+_blockchain_config = blockchain_config;
+_block_time = block_time;
+_block_lt = block_lt;
+_transaction_lt = transaction_lt;
+_chksig_always_succeed = chksig_always_succeed;
+_signature_id = signature_id;
+}
+ExecutionOptions.fromMap(Map<String,dynamic> map){if (map.containsKey('blockchain_config')&&(map['blockchain_config']!=null)) {_blockchain_config = map['blockchain_config'];}
+if (map.containsKey('block_time')&&(map['block_time']!=null)) {_block_time = map['block_time'];}
+if (map.containsKey('block_lt')&&(map['block_lt']!=null)) {_block_lt = BigInt.from(map['block_lt']);}
+if (map.containsKey('transaction_lt')&&(map['transaction_lt']!=null)) {_transaction_lt = BigInt.from(map['transaction_lt']);}
+if (map.containsKey('chksig_always_succeed')&&(map['chksig_always_succeed']!=null)) {_chksig_always_succeed = map['chksig_always_succeed'];}
+if (map.containsKey('signature_id')&&(map['signature_id']!=null)) {_signature_id = map['signature_id'];}
+}
+
+Map<String,dynamic> toMap(){
+Map<String,dynamic> map ={};
+if (_blockchain_config!=null) {map['blockchain_config'] = _blockchain_config;}
+if (_block_time!=null) {map['block_time'] = _block_time;}
+if (_block_lt!=null) {map['block_lt'] = _block_lt;}
+if (_transaction_lt!=null) {map['transaction_lt'] = _transaction_lt;}
+if (_chksig_always_succeed!=null) {map['chksig_always_succeed'] = _chksig_always_succeed;}
+if (_signature_id!=null) {map['signature_id'] = _signature_id;}
+return map;
+}
+}
+
+abstract class AccountForExecutor extends TonSdkStructure{
+static AccountForExecutor fromMap(Map<String,dynamic> map){
+if (map['type']=='None'){
+return AccountForExecutor_None.fromMap(map);
+}
+if (map['type']=='Uninit'){
+return AccountForExecutor_Uninit.fromMap(map);
+}
+if (map['type']=='Account'){
+return AccountForExecutor_Account.fromMap(map);
+}
+throw('AccountForExecutor unknown from map type');
+}
+}
+
+///Non-existing account to run a creation internal message. Should be used with `skip_transaction_check = true` if the message has no deploy data since transactions on the uninitialized account are always aborted
+class AccountForExecutor_None extends AccountForExecutor{
+late String? _type;
+String? get type => _type;
+AccountForExecutor_None(){
+
+_type = 'None';
+}
+AccountForExecutor_None.fromMap(Map<String,dynamic> map){if (!map.containsKey('type') || map['type']!= 'None'){throw('Wrong map data');}else{_type = 'None';}
+}
+
+Map<String,dynamic> toMap(){
+Map<String,dynamic> map ={};
+map['type'] = _type;return map;
+}
+}
+
+///Emulate uninitialized account to run deploy message
+class AccountForExecutor_Uninit extends AccountForExecutor{
+late String? _type;
+String? get type => _type;
+AccountForExecutor_Uninit(){
+
+_type = 'Uninit';
+}
+AccountForExecutor_Uninit.fromMap(Map<String,dynamic> map){if (!map.containsKey('type') || map['type']!= 'Uninit'){throw('Wrong map data');}else{_type = 'Uninit';}
+}
+
+Map<String,dynamic> toMap(){
+Map<String,dynamic> map ={};
+map['type'] = _type;return map;
+}
+}
+
+///Account state to run message
+class AccountForExecutor_Account extends AccountForExecutor{
+late String? _type;
+String? get type => _type;
+///Encoded as base64.
+late String? _boc;
+String? get boc => _boc;
+///Can be used to calculate transaction fees without balance check
+late bool? _unlimited_balance;
+bool? get unlimited_balance => _unlimited_balance;
+AccountForExecutor_Account({required String boc,bool? unlimited_balance,}){
+
+_type = 'Account';
+_boc = ArgumentError.checkNotNull(boc, 'AccountForExecutor_Account boc');
+_unlimited_balance = unlimited_balance;
+}
+AccountForExecutor_Account.fromMap(Map<String,dynamic> map){if (!map.containsKey('type') || map['type']!= 'Account'){throw('Wrong map data');}else{_type = 'Account';}
+if (map.containsKey('boc')&&(map['boc']!=null)) {_boc = map['boc'];}else{throw('Wrong map data');}
+if (map.containsKey('unlimited_balance')&&(map['unlimited_balance']!=null)) {_unlimited_balance = map['unlimited_balance'];}
+}
+
+Map<String,dynamic> toMap(){
+Map<String,dynamic> map ={};
+if (_boc!=null) {map['boc'] = _boc;}
+if (_unlimited_balance!=null) {map['unlimited_balance'] = _unlimited_balance;}
+map['type'] = _type;return map;
+}
+}
+
+class TransactionFees extends TonSdkStructure{
+///Contains the same data as ext_in_msg_fee field
+late BigInt? _in_msg_fwd_fee;
+BigInt? get in_msg_fwd_fee => _in_msg_fwd_fee;
+///Fee for account storage
+late BigInt? _storage_fee;
+BigInt? get storage_fee => _storage_fee;
+///Fee for processing
+late BigInt? _gas_fee;
+BigInt? get gas_fee => _gas_fee;
+///Contains the same data as total_fwd_fees field. Deprecated because of its confusing name, that is not the same with GraphQL API Transaction type's field.
+late BigInt? _out_msgs_fwd_fee;
+BigInt? get out_msgs_fwd_fee => _out_msgs_fwd_fee;
+///Contains the same data as account_fees field
+late BigInt? _total_account_fees;
+BigInt? get total_account_fees => _total_account_fees;
+///Deprecated because it means total value sent in the transaction, which does not relate to any fees.
+late BigInt? _total_output;
+BigInt? get total_output => _total_output;
+///Fee for inbound external message import.
+late BigInt? _ext_in_msg_fee;
+BigInt? get ext_in_msg_fee => _ext_in_msg_fee;
+///Total fees the account pays for message forwarding
+late BigInt? _total_fwd_fees;
+BigInt? get total_fwd_fees => _total_fwd_fees;
+///Total account fees for the transaction execution. Compounds of storage_fee + gas_fee + ext_in_msg_fee + total_fwd_fees
+late BigInt? _account_fees;
+BigInt? get account_fees => _account_fees;
+TransactionFees({required BigInt in_msg_fwd_fee,required BigInt storage_fee,required BigInt gas_fee,required BigInt out_msgs_fwd_fee,required BigInt total_account_fees,required BigInt total_output,required BigInt ext_in_msg_fee,required BigInt total_fwd_fees,required BigInt account_fees,}){
+
+_in_msg_fwd_fee = ArgumentError.checkNotNull(in_msg_fwd_fee, 'TransactionFees in_msg_fwd_fee');
+_storage_fee = ArgumentError.checkNotNull(storage_fee, 'TransactionFees storage_fee');
+_gas_fee = ArgumentError.checkNotNull(gas_fee, 'TransactionFees gas_fee');
+_out_msgs_fwd_fee = ArgumentError.checkNotNull(out_msgs_fwd_fee, 'TransactionFees out_msgs_fwd_fee');
+_total_account_fees = ArgumentError.checkNotNull(total_account_fees, 'TransactionFees total_account_fees');
+_total_output = ArgumentError.checkNotNull(total_output, 'TransactionFees total_output');
+_ext_in_msg_fee = ArgumentError.checkNotNull(ext_in_msg_fee, 'TransactionFees ext_in_msg_fee');
+_total_fwd_fees = ArgumentError.checkNotNull(total_fwd_fees, 'TransactionFees total_fwd_fees');
+_account_fees = ArgumentError.checkNotNull(account_fees, 'TransactionFees account_fees');
+}
+TransactionFees.fromMap(Map<String,dynamic> map){if (map.containsKey('in_msg_fwd_fee')&&(map['in_msg_fwd_fee']!=null)) {_in_msg_fwd_fee = BigInt.from(map['in_msg_fwd_fee']);}else{throw('Wrong map data');}
+if (map.containsKey('storage_fee')&&(map['storage_fee']!=null)) {_storage_fee = BigInt.from(map['storage_fee']);}else{throw('Wrong map data');}
+if (map.containsKey('gas_fee')&&(map['gas_fee']!=null)) {_gas_fee = BigInt.from(map['gas_fee']);}else{throw('Wrong map data');}
+if (map.containsKey('out_msgs_fwd_fee')&&(map['out_msgs_fwd_fee']!=null)) {_out_msgs_fwd_fee = BigInt.from(map['out_msgs_fwd_fee']);}else{throw('Wrong map data');}
+if (map.containsKey('total_account_fees')&&(map['total_account_fees']!=null)) {_total_account_fees = BigInt.from(map['total_account_fees']);}else{throw('Wrong map data');}
+if (map.containsKey('total_output')&&(map['total_output']!=null)) {_total_output = BigInt.from(map['total_output']);}else{throw('Wrong map data');}
+if (map.containsKey('ext_in_msg_fee')&&(map['ext_in_msg_fee']!=null)) {_ext_in_msg_fee = BigInt.from(map['ext_in_msg_fee']);}else{throw('Wrong map data');}
+if (map.containsKey('total_fwd_fees')&&(map['total_fwd_fees']!=null)) {_total_fwd_fees = BigInt.from(map['total_fwd_fees']);}else{throw('Wrong map data');}
+if (map.containsKey('account_fees')&&(map['account_fees']!=null)) {_account_fees = BigInt.from(map['account_fees']);}else{throw('Wrong map data');}
+}
+
+Map<String,dynamic> toMap(){
+Map<String,dynamic> map ={};
+if (_in_msg_fwd_fee!=null) {map['in_msg_fwd_fee'] = _in_msg_fwd_fee;}
+if (_storage_fee!=null) {map['storage_fee'] = _storage_fee;}
+if (_gas_fee!=null) {map['gas_fee'] = _gas_fee;}
+if (_out_msgs_fwd_fee!=null) {map['out_msgs_fwd_fee'] = _out_msgs_fwd_fee;}
+if (_total_account_fees!=null) {map['total_account_fees'] = _total_account_fees;}
+if (_total_output!=null) {map['total_output'] = _total_output;}
+if (_ext_in_msg_fee!=null) {map['ext_in_msg_fee'] = _ext_in_msg_fee;}
+if (_total_fwd_fees!=null) {map['total_fwd_fees'] = _total_fwd_fees;}
+if (_account_fees!=null) {map['account_fees'] = _account_fees;}
+return map;
+}
+}
+
+class ParamsOfRunExecutor extends TonSdkStructure{
+///Must be encoded as base64.
+late String? _message;
+String? get message => _message;
+///Account to run on executor
+late AccountForExecutor? _account;
+AccountForExecutor? get account => _account;
+///Execution options.
+late ExecutionOptions? _execution_options;
+ExecutionOptions? get execution_options => _execution_options;
+///Contract ABI for decoding output messages
+late Abi? _abi;
+Abi? get abi => _abi;
+///Skip transaction check flag
+late bool? _skip_transaction_check;
+bool? get skip_transaction_check => _skip_transaction_check;
+///The BOC itself returned if no cache type provided
+late BocCacheType? _boc_cache;
+BocCacheType? get boc_cache => _boc_cache;
+///Empty string is returned if the flag is `false`
+late bool? _return_updated_account;
+bool? get return_updated_account => _return_updated_account;
+ParamsOfRunExecutor({required String message,required AccountForExecutor account,ExecutionOptions? execution_options,Abi? abi,bool? skip_transaction_check,BocCacheType? boc_cache,bool? return_updated_account,}){
+
+_message = ArgumentError.checkNotNull(message, 'ParamsOfRunExecutor message');
+_account = ArgumentError.checkNotNull(account, 'ParamsOfRunExecutor account');
+_execution_options = execution_options;
+_abi = abi;
+_skip_transaction_check = skip_transaction_check;
+_boc_cache = boc_cache;
+_return_updated_account = return_updated_account;
+}
+ParamsOfRunExecutor.fromMap(Map<String,dynamic> map){if (map.containsKey('message')&&(map['message']!=null)) {_message = map['message'];}else{throw('Wrong map data');}
+if (map.containsKey('account')&&(map['account']!=null)) {_account = AccountForExecutor.fromMap(map['account']);}else{throw('Wrong map data');}
+if (map.containsKey('execution_options')&&(map['execution_options']!=null)) {_execution_options = ExecutionOptions.fromMap(map['execution_options']);}
+if (map.containsKey('abi')&&(map['abi']!=null)) {_abi = Abi.fromMap(map['abi']);}
+if (map.containsKey('skip_transaction_check')&&(map['skip_transaction_check']!=null)) {_skip_transaction_check = map['skip_transaction_check'];}
+if (map.containsKey('boc_cache')&&(map['boc_cache']!=null)) {_boc_cache = BocCacheType.fromMap(map['boc_cache']);}
+if (map.containsKey('return_updated_account')&&(map['return_updated_account']!=null)) {_return_updated_account = map['return_updated_account'];}
+}
+
+Map<String,dynamic> toMap(){
+Map<String,dynamic> map ={};
+if (_message!=null) {map['message'] = _message;}
+if (_account!=null) {map['account'] = _account;}
+if (_execution_options!=null) {map['execution_options'] = _execution_options;}
+if (_abi!=null) {map['abi'] = _abi;}
+if (_skip_transaction_check!=null) {map['skip_transaction_check'] = _skip_transaction_check;}
+if (_boc_cache!=null) {map['boc_cache'] = _boc_cache;}
+if (_return_updated_account!=null) {map['return_updated_account'] = _return_updated_account;}
+return map;
+}
+}
+
+class ResultOfRunExecutor extends TonSdkStructure{
+///In addition to the regular transaction fields there is a
+///`boc` field encoded with `base64` which contains source
+///transaction BOC.
+late dynamic? _transaction;
+dynamic? get transaction => _transaction;
+///Encoded as `base64`
+late List<String>? _out_messages;
+List<String>? get out_messages => _out_messages;
+///Optional decoded message bodies according to the optional `abi` parameter.
+late DecodedOutput? _decoded;
+DecodedOutput? get decoded => _decoded;
+///Encoded as `base64`
+late String? _account;
+String? get account => _account;
+///Transaction fees
+late TransactionFees? _fees;
+TransactionFees? get fees => _fees;
+ResultOfRunExecutor({required dynamic transaction,required List<String> out_messages,DecodedOutput? decoded,required String account,required TransactionFees fees,}){
+
+_transaction = ArgumentError.checkNotNull(transaction, 'ResultOfRunExecutor transaction');
+_out_messages = ArgumentError.checkNotNull(out_messages, 'ResultOfRunExecutor out_messages');
+_decoded = decoded;
+_account = ArgumentError.checkNotNull(account, 'ResultOfRunExecutor account');
+_fees = ArgumentError.checkNotNull(fees, 'ResultOfRunExecutor fees');
+}
+ResultOfRunExecutor.fromMap(Map<String,dynamic> map){if (map.containsKey('transaction')&&(map['transaction']!=null)) {_transaction = map['transaction'];}else{throw('Wrong map data');}
+if (map.containsKey('out_messages')&&(map['out_messages']!=null)) {_out_messages = [];
+for (var el in map['out_messages']) {
+if (el != null) {_out_messages?.add(el);}else {}}}else{throw('Wrong map data');}
+if (map.containsKey('decoded')&&(map['decoded']!=null)) {_decoded = DecodedOutput.fromMap(map['decoded']);}
+if (map.containsKey('account')&&(map['account']!=null)) {_account = map['account'];}else{throw('Wrong map data');}
+if (map.containsKey('fees')&&(map['fees']!=null)) {_fees = TransactionFees.fromMap(map['fees']);}else{throw('Wrong map data');}
+}
+
+Map<String,dynamic> toMap(){
+Map<String,dynamic> map ={};
+if (_transaction!=null) {map['transaction'] = _transaction;}
+if (_out_messages!=null) {map['out_messages'] = _out_messages;}
+if (_decoded!=null) {map['decoded'] = _decoded;}
+if (_account!=null) {map['account'] = _account;}
+if (_fees!=null) {map['fees'] = _fees;}
+return map;
+}
+}
+
+class ParamsOfRunTvm extends TonSdkStructure{
+///Must be encoded as base64.
+late String? _message;
+String? get message => _message;
+///Must be encoded as base64.
+late String? _account;
+String? get account => _account;
+///Execution options.
+late ExecutionOptions? _execution_options;
+ExecutionOptions? get execution_options => _execution_options;
+///Contract ABI for decoding output messages
+late Abi? _abi;
+Abi? get abi => _abi;
+///The BOC itself returned if no cache type provided
+late BocCacheType? _boc_cache;
+BocCacheType? get boc_cache => _boc_cache;
+///Empty string is returned if the flag is `false`
+late bool? _return_updated_account;
+bool? get return_updated_account => _return_updated_account;
+ParamsOfRunTvm({required String message,required String account,ExecutionOptions? execution_options,Abi? abi,BocCacheType? boc_cache,bool? return_updated_account,}){
+
+_message = ArgumentError.checkNotNull(message, 'ParamsOfRunTvm message');
+_account = ArgumentError.checkNotNull(account, 'ParamsOfRunTvm account');
+_execution_options = execution_options;
+_abi = abi;
+_boc_cache = boc_cache;
+_return_updated_account = return_updated_account;
+}
+ParamsOfRunTvm.fromMap(Map<String,dynamic> map){if (map.containsKey('message')&&(map['message']!=null)) {_message = map['message'];}else{throw('Wrong map data');}
+if (map.containsKey('account')&&(map['account']!=null)) {_account = map['account'];}else{throw('Wrong map data');}
+if (map.containsKey('execution_options')&&(map['execution_options']!=null)) {_execution_options = ExecutionOptions.fromMap(map['execution_options']);}
+if (map.containsKey('abi')&&(map['abi']!=null)) {_abi = Abi.fromMap(map['abi']);}
+if (map.containsKey('boc_cache')&&(map['boc_cache']!=null)) {_boc_cache = BocCacheType.fromMap(map['boc_cache']);}
+if (map.containsKey('return_updated_account')&&(map['return_updated_account']!=null)) {_return_updated_account = map['return_updated_account'];}
+}
+
+Map<String,dynamic> toMap(){
+Map<String,dynamic> map ={};
+if (_message!=null) {map['message'] = _message;}
+if (_account!=null) {map['account'] = _account;}
+if (_execution_options!=null) {map['execution_options'] = _execution_options;}
+if (_abi!=null) {map['abi'] = _abi;}
+if (_boc_cache!=null) {map['boc_cache'] = _boc_cache;}
+if (_return_updated_account!=null) {map['return_updated_account'] = _return_updated_account;}
+return map;
+}
+}
+
+class ResultOfRunTvm extends TonSdkStructure{
+///Encoded as `base64`
+late List<String>? _out_messages;
+List<String>? get out_messages => _out_messages;
+///Optional decoded message bodies according to the optional `abi` parameter.
+late DecodedOutput? _decoded;
+DecodedOutput? get decoded => _decoded;
+///Encoded as `base64`. Attention! Only `account_state.storage.state.data` part of the BOC is updated.
+late String? _account;
+String? get account => _account;
+ResultOfRunTvm({required List<String> out_messages,DecodedOutput? decoded,required String account,}){
+
+_out_messages = ArgumentError.checkNotNull(out_messages, 'ResultOfRunTvm out_messages');
+_decoded = decoded;
+_account = ArgumentError.checkNotNull(account, 'ResultOfRunTvm account');
+}
+ResultOfRunTvm.fromMap(Map<String,dynamic> map){if (map.containsKey('out_messages')&&(map['out_messages']!=null)) {_out_messages = [];
+for (var el in map['out_messages']) {
+if (el != null) {_out_messages?.add(el);}else {}}}else{throw('Wrong map data');}
+if (map.containsKey('decoded')&&(map['decoded']!=null)) {_decoded = DecodedOutput.fromMap(map['decoded']);}
+if (map.containsKey('account')&&(map['account']!=null)) {_account = map['account'];}else{throw('Wrong map data');}
+}
+
+Map<String,dynamic> toMap(){
+Map<String,dynamic> map ={};
+if (_out_messages!=null) {map['out_messages'] = _out_messages;}
+if (_decoded!=null) {map['decoded'] = _decoded;}
+if (_account!=null) {map['account'] = _account;}
+return map;
+}
+}
+
+class ParamsOfRunGet extends TonSdkStructure{
+///Account BOC in `base64`
+late String? _account;
+String? get account => _account;
+///Function name
+late String? _function_name;
+String? get function_name => _function_name;
+///Input parameters
+late dynamic? _input;
+dynamic? get input => _input;
+///Execution options
+late ExecutionOptions? _execution_options;
+ExecutionOptions? get execution_options => _execution_options;
+///Default is `false`. Input parameters may use any of lists representations
+///If you receive this error on Web: "Runtime error. Unreachable code should not be executed...",
+///set this flag to true.
+///This may happen, for example, when elector contract contains too many participants
+late bool? _tuple_list_as_array;
+bool? get tuple_list_as_array => _tuple_list_as_array;
+ParamsOfRunGet({required String account,required String function_name,dynamic? input,ExecutionOptions? execution_options,bool? tuple_list_as_array,}){
+
+_account = ArgumentError.checkNotNull(account, 'ParamsOfRunGet account');
+_function_name = ArgumentError.checkNotNull(function_name, 'ParamsOfRunGet function_name');
+_input = input;
+_execution_options = execution_options;
+_tuple_list_as_array = tuple_list_as_array;
+}
+ParamsOfRunGet.fromMap(Map<String,dynamic> map){if (map.containsKey('account')&&(map['account']!=null)) {_account = map['account'];}else{throw('Wrong map data');}
+if (map.containsKey('function_name')&&(map['function_name']!=null)) {_function_name = map['function_name'];}else{throw('Wrong map data');}
+if (map.containsKey('input')&&(map['input']!=null)) {_input = map['input'];}
+if (map.containsKey('execution_options')&&(map['execution_options']!=null)) {_execution_options = ExecutionOptions.fromMap(map['execution_options']);}
+if (map.containsKey('tuple_list_as_array')&&(map['tuple_list_as_array']!=null)) {_tuple_list_as_array = map['tuple_list_as_array'];}
+}
+
+Map<String,dynamic> toMap(){
+Map<String,dynamic> map ={};
+if (_account!=null) {map['account'] = _account;}
+if (_function_name!=null) {map['function_name'] = _function_name;}
+if (_input!=null) {map['input'] = _input;}
+if (_execution_options!=null) {map['execution_options'] = _execution_options;}
+if (_tuple_list_as_array!=null) {map['tuple_list_as_array'] = _tuple_list_as_array;}
+return map;
+}
+}
+
+class ResultOfRunGet extends TonSdkStructure{
+///Values returned by get-method on stack
+late dynamic? _output;
+dynamic? get output => _output;
+ResultOfRunGet({required dynamic output,}){
+
+_output = ArgumentError.checkNotNull(output, 'ResultOfRunGet output');
+}
+ResultOfRunGet.fromMap(Map<String,dynamic> map){if (map.containsKey('output')&&(map['output']!=null)) {_output = map['output'];}else{throw('Wrong map data');}
+}
+
+Map<String,dynamic> toMap(){
+Map<String,dynamic> map ={};
+if (_output!=null) {map['output'] = _output;}
+return map;
+}
+}
+
