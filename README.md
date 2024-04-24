@@ -134,3 +134,7 @@ To initialize the client, you need to call the `TonClient.connect` function and 
 
 ### Android compile notes
 cargo ndk --platform 21 --target x86_64-linux-android build --release
+
+## reference
+[ton_client_dart](https://github.com/freetonsurfer/ton_client_dart)
+[ton_client_flutter](https://github.com/freetonsurfer/ton_client_flutter)
