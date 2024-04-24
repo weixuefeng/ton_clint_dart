@@ -1,5 +1,12 @@
 # TON CLIENT DART
-It is Dart packege that provide binding to TON SDK Client library. TON SDK (TONOS Client Library) is a library written in Rust that can be dynamically linked. It provides all heavy-computation components and functions, such as TON Virtual Machine, TON Transaction Executor, ABI-related functions, boc-related functions, crypto functions.
+It is Dart packege that provide binding to TON SDK Client library. TON SDK (TONOS Client Library) is a library written in Rust that can be dynamically linked. It provides all heavy-computation components and functions, such as TON Virtual Machine, TON Transaction Executor, ABI-related functions, boc-related functions, crypto functions. [ton_client_flutter](https://github.com/weixuefeng/ton_client_flutter)
+
+## generate dart file
+
+```dart
+cd tools/code_generator
+dart code_gen.dart
+```
 
 ## Use this package as a library
 
